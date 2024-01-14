@@ -1,0 +1,12 @@
+[
+  {
+    "name": "John Doe",
+    "birthday": "1/14",
+    "photo": "john-doe.jpg"
+  },
+  {
+    "name": "Jane Smith",
+    "birthday": "1/14",
+    "photo": "jane-smith.jpg"
+  }
+]
