@@ -1,40 +1,31 @@
-document.addEventListener("DOMContentLoaded", function () {
-    // Load JSON data
-    fetch('data.json')
-        .then(response => response.json())
-        .then(data => checkBirthday(data))
-        .catch(error => console.error('Error loading JSON:', error));
-
-    function checkBirthday(data) {
-        // Get current date
-        const today = new Date();
-        const todayFormatted = formatDate(today);
-
-        // Check if any birthdays match today's date
-        const matchingBirthdays = data.filter(person => person.birthday === todayFormatted);
-
-        // Display birthday message
-        const birthdayMessage = document.getElementById('birthdayMessage');
-
-        if (matchingBirthdays.length > 0) {
-            matchingBirthdays.forEach(person => {
-                const message = `Happy Birthday ${person.name} (${person.class}-${person.section})! 🎉<br>
-                                Birthday: ${formatDateFromString(person.birthday)}`;
-                birthdayMessage.innerHTML += message;
-            });
-        } else {
-            birthdayMessage.innerHTML = "No birthdays today. Check back tomorrow! :)";
-        }
-    }
-
-    function formatDate(date) {
-        const day = date.getDate().toString().padStart(2, '0');
-        const month = (date.getMonth() + 1).toString().padStart(2, '0');
-        return `${day}-${month}`;
-    }
-
-    function formatDateFromString(dateString) {
-        const [day, month] = dateString.split('-');
-        return `${day}-${month}`;
-    }
+document.addEventListener('DOMContentLoaded', function() {
+  checkBirthday();
 });
+
+function checkBirthday() {
+  // Fetch today's date in dd-mm format
+  const today = new Date();
+  const dd = String(today.getDate()).padStart(2, '0');
+  const mm = String(today.getMonth() + 1).padStart(2, '0');
+  const todayDate = `${dd}-${mm}`;
+
+  // Fetch data from JSON file
+  fetch('data.json')
+    .then(response => response.json())
+    .then(data => {
+      const students = data.students;
+      const birthdayPerson = students.find(student => student.birthday === todayDate);
+
+      if (birthdayPerson) {
+        displayBirthdayMessage(birthdayPerson);
+      } else {
+        document.getElementById('birthdayMessage').innerHTML = 'No birthdays today.';
+      }
+    })
+    .catch(error => console.error('Error fetching JSON:', error));
+}
+
+function displayBirthdayMessage(person) {
+  const message = `Happy Birthday ${person.name} from Class ${person.class}, Section ${person.section}! 🎉🎂`;
+  document.getElementById('birthdayMessage').innerHTML = message;
+}
