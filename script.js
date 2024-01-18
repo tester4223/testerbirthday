@@ -1,27 +1,31 @@
-document.addEventListener('DOMContentLoaded', function () {
-  fetch('data.json')
-    .then(response => response.json())
-    .then(data => {
-      checkBirthdays(data);
-    })
-    .catch(error => console.error('Error fetching birthdays:', error));
+document.addEventListener('DOMContentLoaded', function() {
+    checkBirthday();
 });
 
-function checkBirthdays(birthdayData) {
-  const today = new Date();
-  const todayString = `${today.getMonth() + 1}/${today.getDate()}`;
+function checkBirthday() {
+    fetch('data.json')
+        .then(response => response.json())
+        .then(data => {
+            const today = new Date();
+            const todayFormatted = formatDate(today);
 
-  const birthdayContainer = document.getElementById('birthdayContainer');
+            data.students.forEach(student => {
+                if (student.birthday === todayFormatted) {
+                    displayBirthdayMessage(student);
+                }
+            });
+        })
+        .catch(error => console.error('Error fetching data:', error));
+}
 
-  birthdayData.forEach(person => {
-    if (person.birthday === todayString) {
-      const birthdayMessage = document.createElement('div');
-      birthdayMessage.innerHTML = `
-        <h2>Happy Birthday, ${person.name}!</h2>
-        <img src="${person.photo}" alt="${person.name}'s photo" style="max-width: 100px; border-radius: 50%;">
-        <p>Birthday: ${person.birthday}</p>
-      `;
-      birthdayContainer.appendChild(birthdayMessage);
-    }
-  });
+function formatDate(date) {
+    const day = date.getDate().toString().padStart(2, '0');
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const year = date.getFullYear();
+    return `${day}-${month}-${year}`;
+}
+
+function displayBirthdayMessage(student) {
+    const birthdayMessageElement = document.getElementById('birthdayMessage');
+    birthdayMessageElement.innerHTML = `Happy Birthday ${student.name} from Class ${student.class}, Section ${student.section}! 🎉🎂`;
 }
