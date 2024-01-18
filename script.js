@@ -1,4 +1,5 @@
-
+document.addEventListener('DOMContentLoaded', function() {
+  checkBirthday();
   
 // Fetch data from JSON file
   fetch('data.json')
@@ -6,8 +7,7 @@
     .then(data => {
       const students = data.students;
       const birthdayPerson = students.find(student => student.birthday === todayDate);
-document.addEventListener('DOMContentLoaded', function() {
-  checkBirthday();
+
 });     
 function checkBirthday() {
   // Fetch today's date in dd-mm format
