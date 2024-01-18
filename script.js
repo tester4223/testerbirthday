@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", function () {
     // Load JSON data
-    fetch('birthdays.json')
+    fetch('data.json')
         .then(response => response.json())
         .then(data => checkBirthday(data))
         .catch(error => console.error('Error loading JSON:', error));
